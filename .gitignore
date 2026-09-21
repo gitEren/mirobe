@@ -1,0 +1,15 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+ios/DerivedData/
+**/ios/DerivedData/
+ios/App/App/public/
+*.db
+*.db-*
+server/data/
+.expo/

@@ -1,0 +1,7 @@
+{
+  "name": "Mirobe — Your Wardrobe, On You",
+  "description": "Scan your real clothes. Save them to your digital wardrobe. Try them on yourself instantly with AI.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

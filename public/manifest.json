@@ -1,0 +1,21 @@
+{
+  "name": "Mirobe — Dijital Gardrop & Sanal Ayna",
+  "short_name": "Mirobe",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141413",
+  "theme_color": "#FBF9F5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
