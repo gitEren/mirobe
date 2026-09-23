@@ -1,0 +1,8 @@
+**/node_modules
+legacy-web
+mobile/*
+!mobile/package.json
+server/data
+**/dist
+.env
+.git

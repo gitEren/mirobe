@@ -7,6 +7,14 @@ import { Client } from '@gradio/client';
 
 dotenv.config();
 
+// Legacy prototype server: its AI endpoints are unauthenticated and spend paid
+// provider credits. It is not part of the Docker image or deploy; refuse to start
+// unless explicitly enabled for local reference work.
+if (process.env.LEGACY_WEB_ENABLED !== '1') {
+  console.error('legacy-web/server.ts is disabled (unauthenticated paid endpoints). Set LEGACY_WEB_ENABLED=1 to run it locally.');
+  process.exit(1);
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

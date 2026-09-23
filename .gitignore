@@ -13,3 +13,14 @@ ios/App/App/public/
 *.db-*
 server/data/
 .expo/
+mobile/ios/
+mobile/android/
+mobile/.env
+server/dist/
+
+# Server-side production secrets (deploy/deploy.sh)
+.env.production
+deploy/.env.production
+deploy/certs/
+# APNs auth key (AuthKey_<KEYID>.p8): only its base64 goes into APNS_KEY_BASE64
+*.p8

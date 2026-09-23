@@ -1,0 +1,144 @@
+{
+  "appPolicies": {
+    "eula": "",
+    "policies": [
+      {
+        "locale": "en_US",
+        "policyText": "",
+        "policyURL": ""
+      }
+    ]
+  },
+  "identifier": "673A148F-1E1D-5B3E-9A25-29169219E084",
+  "nonRenewingSubscriptions": [],
+  "products": [],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "",
+    "_failTransactionsEnabled": false,
+    "_locale": "tr",
+    "_storefront": "TUR",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [
+    {
+      "id": "21A00001",
+      "localizations": [],
+      "name": "Mirobe",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "5999.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "620000000",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Live mirror, video and the largest quotas.",
+              "displayName": "Mirobe Pro (Annual)",
+              "locale": "en_US"
+            },
+            {
+              "description": "Canlı ayna, video ve en yüksek kotalar.",
+              "displayName": "Mirobe Pro (Yıllık)",
+              "locale": "tr"
+            }
+          ],
+          "productID": "mirobe_pro_annual",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Mirobe Pro (Annual)",
+          "subscriptionGroupID": "21A00001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "699.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "620000001",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "Live mirror, video and the largest quotas.",
+              "displayName": "Mirobe Pro (Monthly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "Canlı ayna, video ve en yüksek kotalar.",
+              "displayName": "Mirobe Pro (Aylık)",
+              "locale": "tr"
+            }
+          ],
+          "productID": "mirobe_pro_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Mirobe Pro (Monthly)",
+          "subscriptionGroupID": "21A00001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "2499.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "620000002",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "More try-ons and Jev every month.",
+              "displayName": "Mirobe Plus (Annual)",
+              "locale": "en_US"
+            },
+            {
+              "description": "Her ay daha fazla deneme ve Jev.",
+              "displayName": "Mirobe Plus (Yıllık)",
+              "locale": "tr"
+            }
+          ],
+          "productID": "mirobe_plus_annual",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "Mirobe Plus (Annual)",
+          "subscriptionGroupID": "21A00001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "299.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "620000003",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "More try-ons and Jev every month.",
+              "displayName": "Mirobe Plus (Monthly)",
+              "locale": "en_US"
+            },
+            {
+              "description": "Her ay daha fazla deneme ve Jev.",
+              "displayName": "Mirobe Plus (Aylık)",
+              "locale": "tr"
+            }
+          ],
+          "productID": "mirobe_plus_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "Mirobe Plus (Monthly)",
+          "subscriptionGroupID": "21A00001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

@@ -1,0 +1,654 @@
+{
+ "garments": [
+  {
+   "id": "g_mudwac2amvwvjicb",
+   "createdAt": "2026-09-23T09:22:50.386Z",
+   "updatedAt": "2026-09-23T11:47:20.694Z",
+   "deletedAt": null,
+   "name": "Red Ribbed Knit Cardigan",
+   "category": "outerwear",
+   "subcategory": "cardigan",
+   "colors": [
+    {
+     "name": "red",
+     "hex": "#D60A16"
+    }
+   ],
+   "material": "wool blend",
+   "pattern": "textured",
+   "seasons": [
+    "autumn",
+    "winter",
+    "spring"
+   ],
+   "formality": 2,
+   "occasions": [
+    "casual",
+    "work",
+    "date",
+    "travel"
+   ],
+   "styleTags": [
+    "classic",
+    "minimalist",
+    "smart_casual"
+   ],
+   "extraTags": [
+    "v-neck",
+    "button-down",
+    "ribbed",
+    "long-sleeve",
+    "cropped"
+   ],
+   "description": "Style this vibrant red cardigan with high-waisted blue jeans and ankle boots for a cozy yet polished everyday look.",
+   "confidence": 0.98,
+   "imageUrl": "/media/jWdBzoLL3F6dR7MdD4SJo5Nt.jpg",
+   "cutoutUrl": "/media/fbG8ZDhAcTtSsf9a9KuKEdzZ.png",
+   "packshotUrl": "/media/nUx6Y4RjW1M-F-BC35j_dupx.jpg",
+   "taggingStatus": "ready",
+   "packshotStatus": "ready",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwac2amvwvjicb-photo.jpg",
+   "_studio": "g-g_mudwac2amvwvjicb-studio.png"
+  },
+  {
+   "id": "g_mudwab3pvif90y2l",
+   "createdAt": "2026-09-23T09:22:49.141Z",
+   "updatedAt": "2026-09-23T11:47:25.213Z",
+   "deletedAt": null,
+   "name": "Beige Linen Blazer",
+   "category": "outerwear",
+   "subcategory": "blazer",
+   "colors": [
+    {
+     "name": "beige",
+     "hex": "#E6DCCF"
+    }
+   ],
+   "material": "linen",
+   "pattern": "solid",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn"
+   ],
+   "formality": 4,
+   "occasions": [
+    "work",
+    "formal",
+    "date",
+    "wedding"
+   ],
+   "styleTags": [
+    "classic",
+    "tailored",
+    "smart_casual",
+    "elegant"
+   ],
+   "extraTags": [
+    "notch lapel",
+    "single breasted",
+    "button closure",
+    "structured"
+   ],
+   "description": "Pair this beige linen blazer with navy trousers and a crisp white shirt for a sophisticated summer business look.",
+   "confidence": 0.95,
+   "imageUrl": "/media/3ZJfUWK-pzGh5kYUmlw9OaD_.jpg",
+   "cutoutUrl": "/media/AksNYhJa9bM2zwGVmz9f4enr.png",
+   "packshotUrl": "/media/tQw-vS7hSFfaoZcMgnWkWPXN.jpg",
+   "taggingStatus": "ready",
+   "packshotStatus": "ready",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwab3pvif90y2l-photo.jpg",
+   "_studio": "g-g_mudwab3pvif90y2l-studio.png"
+  },
+  {
+   "id": "g_mudwaa3coihfiqx8",
+   "createdAt": "2026-09-23T09:22:47.832Z",
+   "updatedAt": "2026-09-23T11:47:27.963Z",
+   "deletedAt": null,
+   "name": "Light Wash Slim Fit Jeans",
+   "category": "bottom",
+   "subcategory": "jeans",
+   "colors": [
+    {
+     "name": "light blue",
+     "hex": "#95B8D5"
+    }
+   ],
+   "material": "denim",
+   "pattern": "solid",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "formality": 2,
+   "occasions": [
+    "casual",
+    "work",
+    "travel",
+    "date"
+   ],
+   "styleTags": [
+    "classic",
+    "minimalist"
+   ],
+   "extraTags": [
+    "light wash",
+    "five-pocket",
+    "belt loops",
+    "slim fit"
+   ],
+   "description": "Pair these light wash jeans with a crisp white t-shirt and sneakers for a clean, effortless everyday look.",
+   "confidence": 1,
+   "imageUrl": "/media/R5ytNmofrYinXOPMTXy99GV3.jpg",
+   "cutoutUrl": "/media/OPe5yzLW6rkZ42AIxY6xEa-S.png",
+   "packshotUrl": "/media/3pu10oO-rYS3U_LFUjPad-hk.jpg",
+   "taggingStatus": "ready",
+   "packshotStatus": "ready",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwaa3coihfiqx8-photo.jpg",
+   "_studio": "g-g_mudwaa3coihfiqx8-studio.png"
+  },
+  {
+   "id": "g_mudwa94nuckxmqec",
+   "createdAt": "2026-09-23T09:22:46.583Z",
+   "updatedAt": "2026-09-23T11:47:30.569Z",
+   "deletedAt": null,
+   "name": "Beige Croc-Embossed Top Handle Bag",
+   "category": "accessory",
+   "subcategory": "handbag",
+   "colors": [
+    {
+     "name": "beige",
+     "hex": "#DCCDBA"
+    }
+   ],
+   "material": "leather",
+   "pattern": "textured",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "formality": 3,
+   "occasions": [
+    "work",
+    "date",
+    "formal",
+    "night_out"
+   ],
+   "styleTags": [
+    "minimalist",
+    "classic",
+    "elegant"
+   ],
+   "extraTags": [
+    "top handle",
+    "croc-embossed",
+    "gold hardware",
+    "structured",
+    "clasp closure"
+   ],
+   "description": "Pair this structured beige handbag with a monochromatic outfit or a tailored blazer for a sophisticated and polished look.",
+   "confidence": 1,
+   "imageUrl": "/media/ARMXkovH7IZcXh4JORfYSMEV.jpg",
+   "cutoutUrl": "/media/xKA0S_HmvVoo7ap8wd2QS9Z0.png",
+   "packshotUrl": "/media/HNowUb1sHcKU79j5a_hE8JKf.jpg",
+   "taggingStatus": "ready",
+   "packshotStatus": "ready",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa94nuckxmqec-photo.jpg",
+   "_studio": "g-g_mudwa94nuckxmqec-studio.png"
+  },
+  {
+   "id": "g_mudwa85x3xwxy2f7",
+   "createdAt": "2026-09-23T09:22:45.333Z",
+   "updatedAt": "2026-09-23T11:47:33.107Z",
+   "deletedAt": null,
+   "name": "Beige Belted Trench Coat",
+   "category": "outerwear",
+   "subcategory": "trench coat",
+   "colors": [
+    {
+     "name": "beige",
+     "hex": "#C5A98C"
+    }
+   ],
+   "material": "cotton blend",
+   "pattern": "solid",
+   "seasons": [
+    "spring",
+    "autumn"
+   ],
+   "formality": 3,
+   "occasions": [
+    "work",
+    "casual",
+    "travel",
+    "date"
+   ],
+   "styleTags": [
+    "classic",
+    "minimalist",
+    "tailored"
+   ],
+   "extraTags": [
+    "belted",
+    "lapel",
+    "long sleeves",
+    "button closure"
+   ],
+   "description": "Style this classic beige trench coat over a crisp white shirt and tailored trousers for a sophisticated, timeless look.",
+   "confidence": 0.95,
+   "imageUrl": "/media/Wwim9kqMGBkEdLdz3R98fyTx.jpg",
+   "cutoutUrl": "/media/bPpcST1oQFJawFSyQ3KHt0ZO.png",
+   "packshotUrl": "/media/voSlqwByDNgR23RktJjKU6xB.jpg",
+   "taggingStatus": "ready",
+   "packshotStatus": "ready",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa85x3xwxy2f7-photo.jpg",
+   "_studio": "g-g_mudwa85x3xwxy2f7-studio.png"
+  },
+  {
+   "id": "g_mudwa779o3wluu51",
+   "createdAt": "2026-09-23T09:22:44.085Z",
+   "updatedAt": "2026-09-23T11:47:35.706Z",
+   "deletedAt": null,
+   "name": "Dark Brown Croc-Embossed Loafers",
+   "category": "shoes",
+   "subcategory": "loafers",
+   "colors": [
+    {
+     "name": "dark brown",
+     "hex": "#3D2B1F"
+    },
+    {
+     "name": "black",
+     "hex": "#1A1A1A"
+    }
+   ],
+   "material": "leather",
+   "pattern": "textured",
+   "seasons": [
+    "spring",
+    "autumn",
+    "winter"
+   ],
+   "formality": 3,
+   "occasions": [
+    "work",
+    "casual",
+    "date",
+    "travel"
+   ],
+   "styleTags": [
+    "classic",
+    "smart_casual",
+    "elegant"
+   ],
+   "extraTags": [
+    "croc-embossed",
+    "metal hardware",
+    "slip-on",
+    "low heel"
+   ],
+   "description": "Style these sophisticated loafers with tailored trousers and a crisp button-down shirt for a polished office look.",
+   "confidence": 1,
+   "imageUrl": "/media/rKP-SXJVzVm-r3ysQ-bYx-uG.jpg",
+   "cutoutUrl": "/media/6FdiuHEMDTgXynS05CTXVNc0.png",
+   "packshotUrl": null,
+   "taggingStatus": "ready",
+   "packshotStatus": "none",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa779o3wluu51-photo.jpg",
+   "_studio": null
+  },
+  {
+   "id": "g_mudwa68f8mfx5haw",
+   "createdAt": "2026-09-23T09:22:42.831Z",
+   "updatedAt": "2026-09-23T11:47:38.498Z",
+   "deletedAt": null,
+   "name": "Classic White Crew Neck T-Shirt",
+   "category": "top",
+   "subcategory": "T-shirt",
+   "colors": [
+    {
+     "name": "white",
+     "hex": "#FFFFFF"
+    }
+   ],
+   "material": "cotton",
+   "pattern": "solid",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "formality": 2,
+   "occasions": [
+    "casual",
+    "work",
+    "travel",
+    "lounge"
+   ],
+   "styleTags": [
+    "minimalist",
+    "classic",
+    "smart_casual"
+   ],
+   "extraTags": [
+    "crew-neck",
+    "short-sleeve",
+    "basic",
+    "unisex"
+   ],
+   "description": "This versatile white t-shirt is a wardrobe essential that pairs perfectly with denim jeans or layered under a blazer for a smart-casual look.",
+   "confidence": 1,
+   "imageUrl": "/media/5H0Ria8aX_pb8Vc-gfzNybu0.jpg",
+   "cutoutUrl": "/media/u2bWDmiTrotghGikJjZyRm3q.png",
+   "packshotUrl": null,
+   "taggingStatus": "ready",
+   "packshotStatus": "none",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa68f8mfx5haw-photo.jpg",
+   "_studio": null
+  },
+  {
+   "id": "g_mudwa59aqu3qrt9v",
+   "createdAt": "2026-09-23T09:22:41.566Z",
+   "updatedAt": "2026-09-23T11:47:41.401Z",
+   "deletedAt": null,
+   "name": "Red Textured Dome Handbag",
+   "category": "accessory",
+   "subcategory": "handbag",
+   "colors": [
+    {
+     "name": "burgundy",
+     "hex": "#8B1A26"
+    }
+   ],
+   "material": "leather",
+   "pattern": "textured",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn",
+    "winter"
+   ],
+   "formality": 3,
+   "occasions": [
+    "work",
+    "date",
+    "night_out",
+    "formal"
+   ],
+   "styleTags": [
+    "classic",
+    "elegant",
+    "minimalist"
+   ],
+   "extraTags": [
+    "dome",
+    "structured",
+    "top handle",
+    "zipper closure"
+   ],
+   "description": "Pair this structured burgundy dome bag with a neutral-toned coat or a classic black dress for a sophisticated look.",
+   "confidence": 1,
+   "imageUrl": "/media/kfwRdXaLxGuAhS2z2VOaMEqZ.jpg",
+   "cutoutUrl": "/media/nz6WP7yFTEHtDLdv1aHJUz1H.png",
+   "packshotUrl": null,
+   "taggingStatus": "ready",
+   "packshotStatus": "none",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa59aqu3qrt9v-photo.jpg",
+   "_studio": null
+  },
+  {
+   "id": "g_mudwa4aks9nbf366",
+   "createdAt": "2026-09-23T09:22:40.316Z",
+   "updatedAt": "2026-09-23T11:47:44.785Z",
+   "deletedAt": null,
+   "name": "Black Textured Slingback Flats",
+   "category": "shoes",
+   "subcategory": "flats",
+   "colors": [
+    {
+     "name": "black",
+     "hex": "#000000"
+    }
+   ],
+   "material": "leather",
+   "pattern": "textured",
+   "seasons": [
+    "spring",
+    "summer",
+    "autumn"
+   ],
+   "formality": 3,
+   "occasions": [
+    "work",
+    "casual",
+    "date",
+    "formal"
+   ],
+   "styleTags": [
+    "minimalist",
+    "classic",
+    "elegant"
+   ],
+   "extraTags": [
+    "slingback",
+    "pointed-toe",
+    "elastic-strap",
+    "low-heel"
+   ],
+   "description": "Pair these versatile black slingback flats with tailored trousers or a midi skirt for a polished and comfortable office look.",
+   "confidence": 1,
+   "imageUrl": "/media/58dur7iBtVjAZ6dNk5I-SaKY.jpg",
+   "cutoutUrl": "/media/H1iAMVvPsbCb-cV8nKRHvP-4.png",
+   "packshotUrl": null,
+   "taggingStatus": "ready",
+   "packshotStatus": "none",
+   "source": "gallery",
+   "favorite": false,
+   "wornCount": 0,
+   "lastWornAt": null,
+   "_photo": "g-g_mudwa4aks9nbf366-photo.jpg",
+   "_studio": null
+  }
+ ],
+ "tryons": [
+  {
+   "id": "try_bdb1de3e-6cde-4eb4-9680-72b748720427",
+   "createdAt": "2026-09-23T09:33:06.120Z",
+   "updatedAt": "2026-09-23T09:33:11.690Z",
+   "deletedAt": null,
+   "avatarId": "av_mudw9itatm64lioz",
+   "personUrl": "/media/r-FGy4uiZiTaYELNlKxA1XUm.jpg",
+   "garmentIds": [
+    "g_mudwa94nuckxmqec"
+   ],
+   "status": "ready",
+   "imageUrl": "/media/xZ4xo_culTH9K5tpGtdQZgv1.jpg",
+   "videoStatus": "none",
+   "videoUrl": null,
+   "provider": "google/gemini-3.1-flash-lite-image",
+   "error": null,
+   "_image": "t-try_bdb1de3e-6cde-4eb4-9680-72b748720427.png",
+   "_video": null
+  },
+  {
+   "id": "try_0ad7a55c-56f8-445d-b86a-25d61ecb4a71",
+   "createdAt": "2026-09-23T09:31:39.301Z",
+   "updatedAt": "2026-09-23T09:40:58.280Z",
+   "deletedAt": null,
+   "avatarId": "av_mudw9itatm64lioz",
+   "personUrl": "/media/r-FGy4uiZiTaYELNlKxA1XUm.jpg",
+   "garmentIds": [
+    "g_mudwab3pvif90y2l",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa779o3wluu51",
+    "g_mudwa94nuckxmqec"
+   ],
+   "status": "ready",
+   "imageUrl": "/media/B1_ajOiPKrZ4HWFaPj2NWUDk.jpg",
+   "videoStatus": "none",
+   "videoUrl": null,
+   "provider": "google/gemini-3.1-flash-lite-image",
+   "error": null,
+   "_image": "t-try_0ad7a55c-56f8-445d-b86a-25d61ecb4a71.png",
+   "_video": null
+  },
+  {
+   "id": "try_458a5501-a99a-48b4-93f2-80432c2dc29b",
+   "createdAt": "2026-09-23T09:32:46.126Z",
+   "updatedAt": "2026-09-23T16:36:57.334Z",
+   "deletedAt": null,
+   "avatarId": "av_mudw9itatm64lioz",
+   "personUrl": "/media/r-FGy4uiZiTaYELNlKxA1XUm.jpg",
+   "garmentIds": [
+    "g_mudwac2amvwvjicb",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa779o3wluu51",
+    "g_mudwa59aqu3qrt9v"
+   ],
+   "status": "ready",
+   "imageUrl": "/media/02vb5uXdOiIad3eh0VWra3Ie.jpg",
+   "videoStatus": "ready",
+   "videoUrl": "/media/ZNi21WSzJDHZutE10krEPjGy.mp4",
+   "provider": "google/gemini-3.1-flash-lite-image",
+   "error": null,
+   "_image": "t-try_458a5501-a99a-48b4-93f2-80432c2dc29b.png",
+   "_video": "t-try_458a5501-a99a-48b4-93f2-80432c2dc29b.mp4"
+  }
+ ],
+ "avatars": [
+  {
+   "id": "av_mudw9itatm64lioz",
+   "createdAt": "2026-09-23T09:22:12.478Z",
+   "updatedAt": "2026-09-23T09:22:12.480Z",
+   "deletedAt": null,
+   "imageUrl": "/media/r-FGy4uiZiTaYELNlKxA1XUm.jpg",
+   "isActive": true,
+   "_image": "a-av_mudw9itatm64lioz.jpg"
+  }
+ ],
+ "looks": [
+  {
+   "id": "look_mudwl7x2o039ddu4",
+   "createdAt": "2026-09-23T09:31:18.230Z",
+   "updatedAt": "2026-09-23T11:47:16.519Z",
+   "deletedAt": null,
+   "title": "Colourful Weekend",
+   "occasion": "casual",
+   "style": "smart_casual",
+   "garmentIds": [
+    "g_mudwac2amvwvjicb",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa779o3wluu51",
+    "g_mudwa59aqu3qrt9v"
+   ],
+   "tryonId": "try_458a5501-a99a-48b4-93f2-80432c2dc29b",
+   "coverUrl": "/media/02vb5uXdOiIad3eh0VWra3Ie.jpg",
+   "note": "Kırmızı hırkanın canlılığı, beyaz tişört ve açık mavi kotun sadeliğiyle harika bir denge yakalıyor. Kroko loaferlar ve bordo çanta ise kombine sofistike bir dokunuş katıyor. Hırkanı hafifçe omzundan düşürerek kullanırsan çok daha cool bir hava yaratabilirsin 🍎",
+   "source": "jev",
+   "saved": true
+  },
+  {
+   "id": "look_mudwl6z9rv2e3rbj",
+   "createdAt": "2026-09-23T09:31:17.013Z",
+   "updatedAt": "2026-09-23T11:47:16.525Z",
+   "deletedAt": null,
+   "title": "Elegant Dinner",
+   "occasion": "date",
+   "style": "elegant",
+   "garmentIds": [
+    "g_mudwab3pvif90y2l",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa4aks9nbf366",
+    "g_mudwa59aqu3qrt9v"
+   ],
+   "tryonId": null,
+   "coverUrl": null,
+   "note": "Bu akşamki randevun için seçtiğin bej blazer ve bordo çanta uyumu kesinlikle çok sofistike görünüyor. Keten ceketin dokusu, sivri burun babetlerin zarafetiyle birleşince ortaya hem romantik hem de modern bir denge çıkıyor. Küçük bir ipucu, tişörtünü pantolonunun içine hafifçe sokarak belini vurgularsan silüetin çok daha şık duracaktır ✨",
+   "source": "jev",
+   "saved": true
+  },
+  {
+   "id": "look_mudwl61pqyciypj4",
+   "createdAt": "2026-09-23T09:31:15.805Z",
+   "updatedAt": "2026-09-23T11:47:16.533Z",
+   "deletedAt": null,
+   "title": "Modern Art Chic",
+   "occasion": "casual",
+   "style": "smart_casual",
+   "garmentIds": [
+    "g_mudwa85x3xwxy2f7",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa779o3wluu51",
+    "g_mudwa94nuckxmqec"
+   ],
+   "tryonId": null,
+   "coverUrl": null,
+   "note": "Sergi gezmek için hem çok rahat hem de oldukça sofistike bir seçim yaptın. Trençkotun zamansız bej tonu, loaferların dokusuyla birleşince sonbahar havasını harika yansıtıyor. Görünümünü dengelemek için tişörtünü pantolonunun içine hafifçe sokup belini kemerinle vurgulamayı unutma. ✨",
+   "source": "jev",
+   "saved": true
+  },
+  {
+   "id": "look_mudwiy8yfrefc2cm",
+   "createdAt": "2026-09-23T09:29:32.386Z",
+   "updatedAt": "2026-09-23T11:47:16.538Z",
+   "deletedAt": null,
+   "title": "Modern Office Chic",
+   "occasion": "work",
+   "style": "elegant",
+   "garmentIds": [
+    "g_mudwab3pvif90y2l",
+    "g_mudwa68f8mfx5haw",
+    "g_mudwaa3coihfiqx8",
+    "g_mudwa779o3wluu51",
+    "g_mudwa94nuckxmqec"
+   ],
+   "tryonId": "try_0ad7a55c-56f8-445d-b86a-25d61ecb4a71",
+   "coverUrl": "/media/B1_ajOiPKrZ4HWFaPj2NWUDk.jpg",
+   "note": "Sunum gününde hem çok profesyonel hem de kendinden emin görüneceğin harika bir kombin oldu. Bej blazerın ciddiyetiyle beyaz tişörtün sadeliği birbirini çok iyi dengeliyor, loaferların ise kombine tam kararında bir ağırlık katıyor. Blazeri hafifçe kolları sıvarak kullanırsan çok daha dinamik ve stil sahibi bir duruş yakalarsın. 💼",
+   "source": "jev",
+   "saved": true
+  }
+ ]
+}

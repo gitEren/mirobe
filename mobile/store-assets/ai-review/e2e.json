@@ -1,0 +1,56 @@
+{
+ "garments": [
+  {
+   "id": "g_mue430ta4cjc7shb",
+   "name": "Classic White Crew Neck T-Shirt",
+   "category": "top",
+   "subcategory": "T-shirt",
+   "colors": [
+    {
+     "name": "white",
+     "hex": "#FFFFFF"
+    }
+   ],
+   "material": "cotton",
+   "pattern": "solid",
+   "occasions": [
+    "casual",
+    "work",
+    "travel",
+    "lounge"
+   ],
+   "styleTags": [
+    "minimalist",
+    "classic",
+    "smart_casual"
+   ],
+   "extraTags": [
+    "crew-neck",
+    "short-sleeve",
+    "basic",
+    "unisex"
+   ],
+   "description": "This versatile white t-shirt is a wardrobe essential that pairs perfectly with denim jeans or layered under a blazer for a smart-casual look.",
+   "imageUrl": "/media/wpg_csZRSSP99UPW1XlutC6I.jpg",
+   "packshotUrl": "/media/LMOnUyIFiet1VvmhH1uLSY6n.jpg",
+   "formality": 2,
+   "_photo": "e2e-g_mue430ta4cjc7shb-photo.jpg",
+   "_studio": "e2e-g_mue430ta4cjc7shb-studio.png"
+  }
+ ],
+ "tryons": [
+  {
+   "id": "try_96163e7f-d346-4bfb-b3fd-c27218d87ada",
+   "imageUrl": "/media/fq8FO9T0i8rXS1xirt_VDxAz.jpg",
+   "status": "ready",
+   "_image": "e2e-try_96163e7f-d346-4bfb-b3fd-c27218d87ada.png"
+  }
+ ],
+ "avatars": [
+  {
+   "id": "av_mue449ir4kul1wsg",
+   "imageUrl": "/media/C1-rxAU2D9DSo9gQx2R9D7aK.jpg",
+   "_image": "e2e-av_mue449ir4kul1wsg.jpg"
+  }
+ ]
+}
