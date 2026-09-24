@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Wordmark } from '@/components/brand';
@@ -36,7 +36,10 @@ export default function Welcome() {
         <View style={{ marginTop: 36, gap: 18 }}>
           {steps.map((step, index) => (
             <View key={step} style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-              <Txt style={{ fontFamily: fonts.serifItalic, fontSize: 30, color: colors.mutedGray, width: 30 }}>{index + 1}</Txt>
+              {/* The body variant's 20pt line box clips the 30pt old-style figures on Android (iOS draws past it). */}
+              <Txt style={{ fontFamily: fonts.serifItalic, fontSize: 30, color: colors.mutedGray, width: 30, ...(Platform.OS === 'android' && { lineHeight: 40 }) }}>
+                {index + 1}
+              </Txt>
               <View style={{ flex: 1, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 10 }}>
                 <Txt variant="bodyStrong">{step}</Txt>
               </View>

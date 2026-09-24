@@ -4,6 +4,7 @@ import type { MeResponse } from '@mirobe/shared';
 import type { Config } from '../config';
 import { transaction, type Db } from '../db/index';
 import type { PushSender } from '../lib/apns';
+import type { FcmSender } from '../lib/fcm';
 import { invalidatePlan, resolvePlan } from '../lib/entitlements';
 import { HttpError, route } from '../lib/http';
 import { notificationSettings, pushToUser } from '../lib/push';
@@ -103,6 +104,8 @@ interface BillingDeps {
   requireAccount: RequestHandler;
   /** APNs client for payment notices; null or absent: nothing is sent. */
   push?: PushSender | null;
+  /** FCM client for payment notices to Android devices; null or absent: Android is skipped. */
+  fcm?: FcmSender | null;
 }
 
 /**
@@ -112,7 +115,7 @@ interface BillingDeps {
  * notices and leave in-app notices (see subscriptionNotice, inAppNotice); only
  * their wording and timing come from the event.
  */
-export function billingRoutes({ db, config, usage, auth, requireAccount, push }: BillingDeps) {
+export function billingRoutes({ db, config, usage, auth, requireAccount, push, fcm }: BillingDeps) {
   db.exec(`CREATE TABLE IF NOT EXISTS billing_events (
     id TEXT PRIMARY KEY,
     type TEXT NOT NULL,
@@ -181,7 +184,7 @@ export function billingRoutes({ db, config, usage, auth, requireAccount, push }:
     for (const { userId, notice } of pushes) {
       if (!notice) continue;
       track(
-        pushToUser(db, push, userId, (lang) => subscriptionMessage(notice, lang)).catch((error) =>
+        pushToUser(db, push, userId, (lang) => subscriptionMessage(notice, lang), fcm).catch((error) =>
           console.warn('[mirobe] payment notice failed:', (error as Error).message)
         )
       );

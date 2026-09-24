@@ -16,7 +16,7 @@ const SUPPORT_MAIL = 'support@orbexastudio.com.tr';
 const BASE = '/api/legal';
 
 type Lang = 'tr' | 'en';
-type Doc = 'privacy' | 'terms' | 'support';
+type Doc = 'privacy' | 'terms' | 'support' | 'delete-account';
 
 const mail = (address: string) => `<a href="mailto:${address}">${address}</a>`;
 
@@ -24,9 +24,10 @@ const TITLES: Record<Doc, Record<Lang, string>> = {
   privacy: { tr: 'Gizlilik Politikası', en: 'Privacy Policy' },
   terms: { tr: 'Kullanım Koşulları', en: 'Terms of Use' },
   support: { tr: 'Mirobe Destek', en: 'Mirobe Support' },
+  'delete-account': { tr: 'Mirobe hesabını silmek', en: 'Deleting your Mirobe account' },
 };
 
-const UPDATED: Record<Lang, string> = { tr: 'Son güncelleme 23 Eylül 2026', en: 'Last updated September 23, 2026' };
+const UPDATED: Record<Lang, string> = { tr: 'Son güncelleme 24 Eylül 2026', en: 'Last updated September 24, 2026' };
 
 const BODIES: Record<Doc, Record<Lang, string>> = {
   privacy: {
@@ -35,13 +36,14 @@ const BODIES: Record<Doc, Record<Lang, string>> = {
 <h2>What we collect</h2>
 <p><b>Your account.</b> When you sign up we store your email address and your password in hashed form, so we never see the password itself. Every account also gets an internal user ID.</p>
 <p><b>Your photos and wardrobe.</b> This covers the clothing photos you take or pick from your library, the full-length photo you add for try-ons, and the images and short videos the app creates from them. We also keep the details of each item, such as its category, colours and tags, and the looks you save.</p>
-<p><b>Your messages to Jev.</b> What you write to the stylist is sent to our server so Jev can answer. If you use the microphone, Apple's speech recognition turns your voice into text and only that text reaches us.</p>
+<p><b>Your messages to Jev.</b> What you write to the stylist is sent to our server so Jev can answer. If you use the microphone, your phone's speech recognition (Apple's on iPhone, Google's on Android) turns your voice into text and only that text reaches us.</p>
 <p><b>Usage and subscriptions.</b> We count how many AI features you use each month so we can apply your plan's limits. If you subscribe, the payment is handled by Apple or Google and we never receive your card details. Through RevenueCat we only learn your subscription status and purchase history.</p>
 <p><b>Technical logs.</b> Our server keeps short-lived technical logs, including IP addresses, to keep the service secure and running. They are rotated automatically and are not used to build a profile of you.</p>
+<p><b>Your reports.</b> When you report an AI result in the app, we store the report (the reason, your optional note and, for a Jev reply, its text) with your account and review it, and it is deleted when you delete your account.</p>
 
 <h2>Notifications</h2>
-<p>Notifications stay off until you allow them. If you do, the app sends us your device's push token (issued by Apple, or by Google on Android) and the app's language, and we keep your notification settings with your account. We use them only for the notifications you allowed: payment notices, which our server sends through Apple's push notification service when a payment goes through or fails. The daily 15:00 outfit reminder is scheduled on your phone itself and our server plays no part in it.</p>
-<p>We delete a push token when you sign out, when you delete your account and when Apple tells us the token is no longer valid. You can turn notifications off at any time in Profile, under Notifications, or in your phone's Settings.</p>
+<p>Notifications stay off until you allow them. If you do, the app sends us your device's push token (issued by Apple, or by Google on Android) and the app's language, and we keep your notification settings with your account. We use them only for the notifications you allowed: payment notices, which our server sends through Apple's push notification service or, on Android, Google's Firebase Cloud Messaging when a payment goes through or fails. The daily 15:00 outfit reminder is scheduled on your phone itself and our server plays no part in it.</p>
+<p>We delete a push token when you sign out, when you delete your account and when Apple or Google tells us the token is no longer valid. You can turn notifications off at any time in Profile, under Notifications, or in your phone's Settings.</p>
 <p>Some subscription updates, such as auto-renewal being switched back on, are shown inside the app the next time you open it instead of as a notification. The app shows each one once, and we keep them for at most 30 days.</p>
 
 <h2>What we don't do</h2>
@@ -73,13 +75,14 @@ const BODIES: Record<Doc, Record<Lang, string>> = {
 <h2>Topladığımız bilgiler</h2>
 <p><b>Hesap bilgilerin.</b> Kayıt olduğunda e-posta adresini ve şifreni saklarız. Şifren geri çevrilemeyecek biçimde özetlenerek tutulur, yani şifrenin kendisini hiçbir zaman görmeyiz. Her hesaba ayrıca bir kullanıcı kimliği atanır.</p>
 <p><b>Fotoğrafların ve gardırobun.</b> Çektiğin ya da galeriden seçtiğin kıyafet fotoğrafları, deneme için eklediğin tam boy fotoğrafın ve uygulamanın bunlardan ürettiği görseller ile kısa videolar bu kapsamdadır. Her parçanın kategori, renk ve etiket gibi bilgilerini ve kaydettiğin kombinleri de saklarız.</p>
-<p><b>Jev'e yazdıkların.</b> Stilist Jev'e yazdığın mesajlar cevap verebilmesi için sunucumuza gönderilir. Mikrofonu kullanırsan sesin Apple'ın konuşma tanıma özelliğiyle metne çevrilir ve bize yalnızca bu metin ulaşır.</p>
+<p><b>Jev'e yazdıkların.</b> Stilist Jev'e yazdığın mesajlar cevap verebilmesi için sunucumuza gönderilir. Mikrofonu kullanırsan sesin telefonunun konuşma tanıma özelliğiyle (iPhone'da Apple'ın, Android'de Google'ın) metne çevrilir ve bize yalnızca bu metin ulaşır.</p>
 <p><b>Kullanım ve abonelik.</b> Paketinin limitlerini uygulayabilmek için her ay yapay zeka özelliklerini kaç kez kullandığını sayarız. Abonelik satın alırsan ödemeyi Apple ya da Google alır ve kart bilgilerin bize hiçbir zaman ulaşmaz. RevenueCat üzerinden yalnızca abonelik durumunu ve satın alma geçmişini öğreniriz.</p>
 <p><b>Teknik kayıtlar.</b> Sunucumuz, hizmeti güvenli ve çalışır tutmak için IP adresini de içeren kısa süreli teknik kayıtlar tutar. Bu kayıtlar otomatik olarak silinir ve hakkında profil çıkarmak için kullanılmaz.</p>
+<p><b>Sorun bildirimlerin.</b> Uygulamada bir yapay zeka sonucuyla ilgili sorun bildirdiğinde bildirimini (sebebini, varsa notunu ve bir Jev cevabıysa metnini) hesabınla birlikte saklar ve inceleriz; hesabını sildiğinde o da silinir.</p>
 
 <h2>Bildirimler</h2>
-<p>Bildirimler sen izin verene kadar kapalıdır. İzin verirsen uygulama, cihazının bildirim kimliğini (Apple'ın, Android'de Google'ın verdiği push token) ve uygulamanın dilini bize gönderir; bildirim tercihlerini de hesabınla birlikte saklarız. Bunları yalnızca izin verdiğin bildirimler için kullanırız: ödemen alındığında ya da alınamadığında sunucumuzun Apple'ın bildirim servisi üzerinden gönderdiği ödeme bildirimleri. Her gün 15:00'teki kombin hatırlatması doğrudan telefonunda planlanır, sunucumuz bu hatırlatmada kullanılmaz.</p>
-<p>Bildirim kimliğini çıkış yaptığında, hesabını sildiğinde ya da Apple bu kimliğin artık geçerli olmadığını bildirdiğinde sileriz. Bildirimleri istediğin zaman Profil'deki Bildirimler bölümünden ya da telefonunun Ayarlar'ından kapatabilirsin.</p>
+<p>Bildirimler sen izin verene kadar kapalıdır. İzin verirsen uygulama, cihazının bildirim kimliğini (Apple'ın, Android'de Google'ın verdiği push token) ve uygulamanın dilini bize gönderir; bildirim tercihlerini de hesabınla birlikte saklarız. Bunları yalnızca izin verdiğin bildirimler için kullanırız: ödemen alındığında ya da alınamadığında sunucumuzun Apple'ın bildirim servisi ya da Android'de Google'ın Firebase Cloud Messaging servisi üzerinden gönderdiği ödeme bildirimleri. Her gün 15:00'teki kombin hatırlatması doğrudan telefonunda planlanır, sunucumuz bu hatırlatmada kullanılmaz.</p>
+<p>Bildirim kimliğini çıkış yaptığında, hesabını sildiğinde ya da Apple veya Google bu kimliğin artık geçerli olmadığını bildirdiğinde sileriz. Bildirimleri istediğin zaman Profil'deki Bildirimler bölümünden ya da telefonunun Ayarlar'ından kapatabilirsin.</p>
 <p>Otomatik yenilemenin yeniden açılması gibi bazı abonelik güncellemeleri bildirim olarak gönderilmez, uygulamayı bir sonraki açışında uygulamanın içinde gösterilir. Uygulama her birini bir kez gösterir ve bunları en fazla 30 gün saklarız.</p>
 
 <h2>Yapmadıklarımız</h2>
@@ -180,6 +183,49 @@ const BODIES: Record<Doc, Record<Lang, string>> = {
 <h2>Gizlilik</h2>
 <p>Verilerini nasıl işlediğimizi <a href="${BASE}/privacy?lang=tr">gizlilik politikamızda</a> okuyabilirsin.</p>`,
   },
+  'delete-account': {
+    en: `<p>Mirobe (by Orbexa Studio) lets you delete your account and its data at any time, from the app or by email.</p>
+
+<h2>In the app</h2>
+<ol>
+<li>Open Mirobe and sign in.</li>
+<li>Go to Profile and tap Delete account.</li>
+<li>Enter your password to confirm.</li>
+</ol>
+<p>Your account is deleted immediately.</p>
+
+<h2>Without the app</h2>
+<p>If you no longer have the app, write to ${mail(PRIVACY_MAIL)} from the email address of your Mirobe account with the subject "Delete my account". We confirm by email and delete the account within 30 days.</p>
+
+<h2>What is deleted</h2>
+<p>Your account (email address, hashed password, user ID), your wardrobe, your photos, the images and videos created from them, your saved looks, your usage counts, your notification settings and push tokens, your in-app notices, and your reports of AI results.</p>
+
+<h2>What is kept, and for how long</h2>
+<p>Copies in our backups are deleted within 30 days. Short-lived technical server logs are rotated automatically. Purchase records kept by Apple, Google and RevenueCat follow their own retention rules, and an active subscription is not cancelled by deleting the account: cancel it in the App Store or Google Play as well.</p>
+
+<p>More in our <a href="${BASE}/privacy?lang=en">privacy policy</a>.</p>`,
+
+    tr: `<p>Mirobe (Orbexa Studio) hesabını ve verilerini istediğin zaman uygulamadan ya da e-postayla silebilirsin.</p>
+
+<h2>Uygulamadan</h2>
+<ol>
+<li>Mirobe'yi aç ve giriş yap.</li>
+<li>Profil'e git ve Hesabı sil'e dokun.</li>
+<li>Onaylamak için şifreni gir.</li>
+</ol>
+<p>Hesabın hemen silinir.</p>
+
+<h2>Uygulama olmadan</h2>
+<p>Uygulama artık elinde değilse Mirobe hesabının e-posta adresinden ${mail(PRIVACY_MAIL)} adresine "Hesabımı sil" konulu bir e-posta gönder. E-postayla onaylar ve hesabını en geç 30 gün içinde sileriz.</p>
+
+<h2>Neler silinir</h2>
+<p>Hesabın (e-posta adresin, şifrenin özeti, kullanıcı kimliğin), gardırobun, fotoğrafların, bunlardan üretilen görseller ve videolar, kaydettiğin kombinler, kullanım sayaçların, bildirim tercihlerin ve bildirim kimliklerin, uygulama içi duyuruların ve yapay zeka sonuçları için gönderdiğin sorun bildirimlerin.</p>
+
+<h2>Neler, ne kadar süre kalır</h2>
+<p>Yedeklerdeki kopyalar en geç 30 gün içinde silinir. Kısa süreli teknik sunucu kayıtları otomatik olarak döndürülür. Apple, Google ve RevenueCat'in tuttuğu satın alma kayıtları onların kendi saklama kurallarına tabidir; hesabı silmek aktif bir aboneliği iptal etmez, onu App Store'dan ya da Google Play'den ayrıca iptal et.</p>
+
+<p>Ayrıntılar <a href="${BASE}/privacy?lang=tr">gizlilik politikamızda</a>.</p>`,
+  },
 };
 
 function render(doc: Doc, lang: Lang) {
@@ -220,5 +266,7 @@ export function legalRoutes() {
   router.get(`${BASE}/privacy`, send('privacy'));
   router.get(`${BASE}/terms`, send('terms'));
   router.get(`${BASE}/support`, send('support'));
+  // The account deletion page the Google Play listing links to (Data safety → delete account URL).
+  router.get(`${BASE}/delete-account`, send('delete-account'));
   return router;
 }

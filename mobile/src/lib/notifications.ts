@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { requireOptionalNativeModule } from 'expo';
 import { router, type Href } from 'expo-router';
 import type * as ExpoNotifications from 'expo-notifications';
-import type { PushEnvironment } from '@mirobe/shared';
+import { ANDROID_DEFAULT_CHANNEL, type PushEnvironment } from '@mirobe/shared';
 import { api } from './api';
 import { dictionaries } from './i18n';
 import { localDb } from './localDb';
@@ -92,8 +92,11 @@ export function reloadLocalPreferences() {
 // Permission
 // ---------------------------------------------------------------------------
 
-function toPermission(response: { granted: boolean; status: string }): NotificationPermission {
+function toPermission(response: { granted: boolean; status: string; canAskAgain?: boolean }): NotificationPermission {
   if (response.granted) return 'granted';
+  // Android 13+ reports POST_NOTIFICATIONS that was never asked as 'denied' with canAskAgain;
+  // the system prompt can still be shown then, so it counts as not answered yet.
+  if (Platform.OS === 'android' && response.canAskAgain) return 'undetermined';
   return response.status === 'undetermined' ? 'undetermined' : 'denied';
 }
 
@@ -111,8 +114,17 @@ export async function refreshPermission(): Promise<NotificationPermission> {
   }
 }
 
+/**
+ * Android channels: "Mirobe" for the server's pushes (payment notices; FCM's default channel via
+ * app.json, so none lands in "Miscellaneous") and the daily reminder's own. Re-creating one only
+ * updates its name; the importance the user chose in Settings stays.
+ */
 async function ensureAndroidChannel(N: Notifications) {
   if (Platform.OS !== 'android') return;
+  await N.setNotificationChannelAsync(ANDROID_DEFAULT_CHANNEL, {
+    name: 'Mirobe',
+    importance: N.AndroidImportance.DEFAULT,
+  }).catch(() => undefined);
   await N.setNotificationChannelAsync(DAILY_CHANNEL, {
     name: dictionaries[getState().lang].notifications.channelDaily,
     importance: N.AndroidImportance.DEFAULT,
@@ -209,6 +221,8 @@ export function registerDevice(force = false): Promise<void> {
     const N = native();
     const { userId, lang } = getState();
     if (!N || !userId || state.permission !== 'granted') return;
+    // The channel exists before the server can push to this device.
+    await ensureAndroidChannel(N);
     try {
       const token = await deviceToken(N, 15_000);
       if (!token) return;

@@ -21,7 +21,9 @@ export async function addGarmentsFromLibrary(onAdded?: (item: { garment: Garment
   const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], allowsMultipleSelection: true, selectionLimit: 12, quality: 0.9 });
   if (result.canceled) return 0;
   for (const asset of result.assets) {
-    onAdded?.(await addGarmentFromPhoto(asset.uri, { width: asset.width, height: asset.height }, 'gallery'));
+    // Not `onAdded?.(await …)`: without a callback that would skip adding the garment altogether.
+    const added = await addGarmentFromPhoto(asset.uri, { width: asset.width, height: asset.height }, 'gallery');
+    onAdded?.(added);
   }
   return result.assets.length;
 }

@@ -24,3 +24,4 @@ deploy/.env.production
 deploy/certs/
 # APNs auth key (AuthKey_<KEYID>.p8): only its base64 goes into APNS_KEY_BASE64
 *.p8
+mobile/google-services.json

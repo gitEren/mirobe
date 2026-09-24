@@ -7,6 +7,7 @@ import { GARMENT_CATEGORIES, OCCASIONS, STYLE_TAGS, labelFor, type GarmentRow } 
 import { confirmSpend, type SpendKind } from '@/lib/spend';
 import { Image } from 'expo-image';
 import { TagList } from '@/components/garment';
+import { ReportLink, ReportSheet, Toast, useToast, type ReportTarget } from '@/components/report';
 import { mediaUrl } from '@/lib/api';
 import { Banner, Button, Chip, IconButton, Txt } from '@/components/ui';
 import {
@@ -47,6 +48,8 @@ export default function GarmentDetail() {
   const [studioError, setStudioError] = useState<string | null>(null);
   /** This screen's own request, so a double tap cannot start (and charge) a second packshot. */
   const [studioRequesting, setStudioRequesting] = useState(false);
+  const [report, setReport] = useState<ReportTarget | null>(null);
+  const [toast, setToast] = useToast();
 
   if (!garment) {
     return (
@@ -62,6 +65,9 @@ export default function GarmentDetail() {
   );
   const activeView = view && views.includes(view) ? view : views[0];
   const shownUrl = activeView === 'studio' ? garment.packshotUrl : activeView === 'cutout' ? garment.cutoutUrl : garment.imageUrl;
+  // What the AI made here: the studio image while it is shown, otherwise the tags.
+  const reportable: ReportTarget['type'] | null =
+    activeView === 'studio' && garment.packshotUrl ? 'packshot' : garment.taggingStatus === 'ready' ? 'tagging' : null;
   const studioBusy = studioRequesting || studioOnItsWay || inFlight(garment.packshotStatus, garment.updatedAt);
 
   const makeStudio = async () => {
@@ -245,6 +251,7 @@ export default function GarmentDetail() {
                 <Txt variant="tiny">{garment.confidence ? t.garment.confidence(Math.round(garment.confidence * 100)) : ''}</Txt>
                 <Txt variant="tiny">{t.garment.worn(garment.wornCount)}</Txt>
               </View>
+              {reportable ? <ReportLink onPress={() => setReport({ type: reportable, id: garment.id })} style={{ marginTop: -10 }} /> : null}
             </>
           ) : null}
 
@@ -306,6 +313,8 @@ export default function GarmentDetail() {
           />
         </View>
       ) : null}
+      <Toast message={toast} bottom={insets.bottom + 90} />
+      <ReportSheet target={report} onClose={() => setReport(null)} onSent={setToast} />
     </View>
   );
 }

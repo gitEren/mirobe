@@ -39,9 +39,11 @@ import { renderTryOn, tryOnCacheKey } from './ai/tryon';
 import { createRealtimeToken, uploadToFal } from './ai/fal';
 import { checkMotionClipJob, startMotionClip } from './ai/video';
 import { createApnsSender, type PushSender } from './lib/apns';
+import { createFcmSender, type FcmSender } from './lib/fcm';
 import { billingRoutes } from './routes/billing';
 import { legalRoutes } from './routes/legal';
 import { pushRoutes } from './routes/push';
+import { reportRoutes } from './routes/reports';
 
 const LangSchema = z.enum(['tr', 'en']).default('tr');
 
@@ -61,11 +63,14 @@ export interface AppContext {
   usage: UsageLedger;
   /** Push sender; defaults to APNs from the config (null when it is not configured). Overridable for tests. */
   push?: PushSender | null;
+  /** Android push sender; defaults to FCM from the config (null when it is not configured). Overridable for tests. */
+  fcm?: FcmSender | null;
 }
 
 export function createApp(ctx: AppContext) {
   const { db, config, media, usage } = ctx;
   const push = ctx.push === undefined ? createApnsSender(config) : ctx.push;
+  const fcm = ctx.fcm === undefined ? createFcmSender(config) : ctx.fcm;
   /** Renders in flight by cache key, so identical concurrent requests share one paid generation. */
   const rendering = new Map<string, Promise<TryOnRow>>();
   const app = express();
@@ -601,8 +606,9 @@ export function createApp(ctx: AppContext) {
     })
   );
 
-  app.use(billingRoutes({ db, config, usage, auth, requireAccount, push }));
+  app.use(billingRoutes({ db, config, usage, auth, requireAccount, push, fcm }));
   app.use(pushRoutes({ db, auth }));
+  app.use(reportRoutes({ db, auth, requireAccount }));
   app.use(legalRoutes());
 
   app.use('/api', (_req, _res, next) => next(new HttpError(404, 'Not found')));

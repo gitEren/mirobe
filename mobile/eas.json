@@ -15,14 +15,16 @@
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_API_URL": "https://mirobe.orbexastudio.com.tr",
-        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_bKwGLHuLPtcYKNMTSHAHDniivtd"
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_bKwGLHuLPtcYKNMTSHAHDniivtd",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_YhUZCxeBPCqAvTWWkDFGSZDXhkT"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_API_URL": "https://mirobe.orbexastudio.com.tr",
-        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_bKwGLHuLPtcYKNMTSHAHDniivtd"
+        "EXPO_PUBLIC_REVENUECAT_IOS_KEY": "appl_bKwGLHuLPtcYKNMTSHAHDniivtd",
+        "EXPO_PUBLIC_REVENUECAT_ANDROID_KEY": "goog_YhUZCxeBPCqAvTWWkDFGSZDXhkT"
       }
     }
   },

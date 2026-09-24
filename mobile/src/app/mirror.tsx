@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BookmarkPlus, Camera, Film, ImageIcon, Radio, ScanLine, Sparkles, SwitchCamera, X } from 'lucide-react-native';
 import { GARMENT_CATEGORIES, LIVE_MIRROR_ENABLED, labelFor, type GarmentCategory, type TryOnRow } from '@mirobe/shared';
 import { garmentImage, isIsolated } from '@/components/garment';
+import { ReportLink, ReportSheet, type ReportTarget } from '@/components/report';
 import { Chip, IconButton, Txt, haptic } from '@/components/ui';
 import { api, ApiError, mediaUrl } from '@/lib/api';
 import { upper } from '@/lib/i18n';
@@ -75,6 +76,7 @@ function Mirror() {
   const [rendering, setRendering] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [savedLook, setSavedLook] = useState(false);
+  const [report, setReport] = useState<ReportTarget | null>(null);
   const camera = useRef<CameraSurfaceHandle>(null);
   /** Synchronous in-flight guard: `rendering` state lags a render behind, so a fast double tap could start two paid renders. */
   const renderingRef = useRef(false);
@@ -371,7 +373,10 @@ function Mirror() {
             <Txt style={styles.pillText}>{statusLabel}</Txt>
           </View>
         </View>
-        {result ? null : (
+        {result ? (
+          // The fresh result can be reported right here: the clip when it plays, otherwise the photo.
+          <ReportLink dark onPress={() => setReport({ type: videoUrl && showVideo ? 'video' : 'tryon', id: result.id })} style={{ alignSelf: 'center' }} />
+        ) : (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <Sparkles size={13} color={colors.amber} />
             <Txt style={{ color: 'rgba(255,255,255,0.9)', fontFamily: fonts.sansSemi, fontSize: 11, letterSpacing: 2.5 }}>{t.mirror.title}</Txt>
@@ -540,6 +545,15 @@ function Mirror() {
           </Pressable>
         )}
       </View>
+      <ReportSheet
+        target={report}
+        onClose={() => setReport(null)}
+        onSent={(text) => {
+          // An offensive or privacy report removed the try-on: back to the camera.
+          if (resultId && !getState().tryons.some((tr) => tr.id === resultId)) backToCamera();
+          setMessage(text);
+        }}
+      />
     </View>
   );
 }

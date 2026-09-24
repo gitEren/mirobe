@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowUp, Mic, Sparkles, X } from 'lucide-react-native';
-import type { StylistChatMessage, StylistDecision } from '@mirobe/shared';
+import { ArrowUp, Flag, Mic, Sparkles, X } from 'lucide-react-native';
+import { AI_REPORT_EXCERPT_MAX, type StylistChatMessage, type StylistDecision } from '@mirobe/shared';
 import { AccountGate } from '@/components/AccountGate';
 import { garmentImage, isIsolated } from '@/components/garment';
+import { ReportSheet, Toast, useToast, type ReportTarget } from '@/components/report';
 import { Button, Chip, IconButton, Txt, haptic } from '@/components/ui';
 import { aiErrorMessage, chatWithStylist, ensureAiConsent, requireAccount, saveLook, useStore, useStrings } from '@/lib/store';
 import { colors, fonts, radius } from '@/lib/theme';
@@ -38,6 +39,8 @@ function Stylist() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [busy, setBusy] = useState(false);
+  const [report, setReport] = useState<ReportTarget | null>(null);
+  const [toast, setToast] = useToast();
   const scroll = useRef<ScrollView>(null);
   const history = useRef<Message[]>([]);
   /** A message is waiting for the consent sheet: taps meanwhile must not send a second one. */
@@ -127,7 +130,7 @@ function Stylist() {
   const lastAssistant = [...messages].reverse().find((m) => m.role === 'assistant');
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.ivory }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.ivory }} behavior="padding">
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
           <View style={styles.avatar}>
@@ -176,11 +179,30 @@ function Stylist() {
             </View>
           ) : (
             <View key={message.id} style={{ gap: 10 }}>
-              <View style={[styles.assistantBubble, message.error && { backgroundColor: '#F7EBD3' }]}>
+              {/* A Jev reply can be reported: a long press on it, or the small flag below it. */}
+              <Pressable
+                disabled={message.error}
+                onLongPress={() => {
+                  void haptic('medium');
+                  setReport(replyTarget(message));
+                }}
+                style={[styles.assistantBubble, message.error && { backgroundColor: '#F7EBD3' }]}
+              >
                 <Txt variant="body" style={{ lineHeight: 21 }}>
                   {message.text}
                 </Txt>
-              </View>
+              </Pressable>
+              {!message.error ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t.report.action}
+                  hitSlop={10}
+                  onPress={() => setReport(replyTarget(message))}
+                  style={styles.flag}
+                >
+                  <Flag size={11} color={colors.mutedGray} />
+                </Pressable>
+              ) : null}
               {message.decision ? (
                 <OutfitCard
                   decision={message.decision}
@@ -241,9 +263,14 @@ function Stylist() {
           <ArrowUp size={18} color={colors.ivory} />
         </Pressable>
       </View>
+      <Toast message={toast} bottom={insets.bottom + 72} />
+      <ReportSheet target={report} onClose={() => setReport(null)} onSent={setToast} />
     </KeyboardAvoidingView>
   );
 }
+
+/** A Jev reply as a report target: its local id, and its text (the server keeps no chat history). */
+const replyTarget = (message: Message): ReportTarget => ({ type: 'stylist', id: message.id, excerpt: message.text.slice(0, AI_REPORT_EXCERPT_MAX) });
 
 function OutfitCard({ decision, saved, onSave, onTryOn }: { decision: StylistDecision; saved: boolean; onSave: () => void; onTryOn: () => void }) {
   const t = useStrings();
@@ -273,6 +300,7 @@ function OutfitCard({ decision, saved, onSave, onTryOn }: { decision: StylistDec
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 20, paddingBottom: 10 },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.charcoal, alignItems: 'center', justifyContent: 'center' },
+  flag: { alignSelf: 'flex-start', marginTop: -6, marginLeft: 10, padding: 2 },
   notice: { padding: 12, borderRadius: radius.md, backgroundColor: colors.stone },
   suggestion: { paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
   userBubble: {

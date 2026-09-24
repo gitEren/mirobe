@@ -1,7 +1,8 @@
 import crypto from 'node:crypto';
-import type { NotificationSettings, PushEnvironment, PushPlatform, PushTokenInput } from '@mirobe/shared';
+import { ANDROID_DEFAULT_CHANNEL, type NotificationSettings, type PushEnvironment, type PushPlatform, type PushTokenInput } from '@mirobe/shared';
 import { transaction, type Db } from '../db/index';
 import { isDeadToken, type PushSender } from './apns';
+import { isDeadFcmToken, type FcmSender } from './fcm';
 
 /** Tokens kept per user, most recently seen first (a reinstalled phone, a second device, …). */
 const MAX_TOKENS_PER_USER = 10;
@@ -74,55 +75,86 @@ export interface PushMessage {
   ttlSeconds?: number;
 }
 
-let warnedUnconfigured = false;
+const warnedUnconfigured = new Set<PushPlatform>();
+
+function warnUnconfigured(platform: PushPlatform) {
+  if (warnedUnconfigured.has(platform)) return;
+  warnedUnconfigured.add(platform);
+  console.warn(
+    platform === 'ios'
+      ? '[mirobe] push skipped: APNs is not configured (APNS_KEY_ID, APNS_KEY_BASE64)'
+      : '[mirobe] push skipped: FCM is not configured (FCM_SERVICE_ACCOUNT_BASE64)'
+  );
+}
 
 /**
- * Sends a message to all of the user's iOS devices, each in its own language and through its
- * own APNs environment (a development build's token only works on the sandbox host). The store
- * environment of the event does not filter devices: TestFlight buys in the sandbox while its
- * builds hold production tokens, and a notice only ever reaches the buyer's own devices. Tokens APNs reports dead (410 Unregistered, 400
- * BadDeviceToken) are deleted. Android tokens are kept for a later FCM sender.
- * Never throws.
+ * Sends a message to all of the user's devices, each in its own language: iOS through APNs,
+ * Android through FCM. Each iOS token goes through its own APNs environment (a development
+ * build's token only works on the sandbox host). The store environment of the event does not
+ * filter devices: TestFlight buys in the sandbox while its builds hold production tokens, and a
+ * notice only ever reaches the buyer's own devices. Tokens reported dead are deleted (APNs 410
+ * Unregistered / 400 BadDeviceToken, FCM 404 / UNREGISTERED / invalid token). A platform whose
+ * sender is not configured is skipped (logged once). Never throws.
  */
 export async function pushToUser(
   db: Db,
   sender: PushSender | null | undefined,
   userId: string,
-  compose: (lang: PushLang) => PushMessage
+  compose: (lang: PushLang) => PushMessage,
+  fcm?: FcmSender | null
 ): Promise<{ sent: number; removed: number }> {
-  const tokens = pushTokensOf(db, userId).filter((row) => row.platform === 'ios');
-  if (tokens.length === 0) return { sent: 0, removed: 0 };
-  if (!sender) {
-    if (!warnedUnconfigured) {
-      warnedUnconfigured = true;
-      console.warn('[mirobe] push skipped: APNs is not configured (APNS_KEY_ID, APNS_KEY_BASE64)');
-    }
-    return { sent: 0, removed: 0 };
-  }
+  const tokens = pushTokensOf(db, userId).filter((row) => {
+    const configured = row.platform === 'ios' ? !!sender : row.platform === 'android' ? !!fcm : false;
+    if (!configured) warnUnconfigured(row.platform);
+    return configured;
+  });
   let sent = 0;
   let removed = 0;
   await Promise.all(
     tokens.map(async (row) => {
       const message = compose(row.lang === 'en' ? 'en' : 'tr');
-      const result = await sender
-        .send({
-          token: row.token,
-          environment: row.environment,
-          collapseId: message.collapseId,
-          ttlSeconds: message.ttlSeconds,
-          payload: {
-            aps: { alert: { title: message.title, body: message.body }, sound: 'default', 'thread-id': message.threadId ?? message.kind },
-            // expo-notifications exposes a remote notification's `body` key as `notification.request.content.data`.
-            body: { kind: message.kind, url: message.url },
-          },
-        })
-        .catch((error: Error) => ({ status: 0, reason: error.message }));
+      let result: { status: number; reason?: string };
+      let dead: boolean;
+      if (row.platform === 'android') {
+        const fcmResult = await fcm!
+          .send({
+            token: row.token,
+            title: message.title,
+            body: message.body,
+            // expo-notifications exposes an FCM message's `data` map as `notification.request.content.data`.
+            data: { kind: message.kind, url: message.url },
+            collapseId: message.collapseId,
+            ttlSeconds: message.ttlSeconds,
+            // The app's "Mirobe" channel (also FCM's default in the manifest); the 'daily' channel belongs
+            // to the on-device outfit reminder. An app build without the channel falls back as before.
+            channelId: ANDROID_DEFAULT_CHANNEL,
+          })
+          .catch((error: Error) => ({ status: 0, reason: error.message }));
+        result = fcmResult;
+        dead = isDeadFcmToken(fcmResult);
+      } else {
+        const apnsResult = await sender!
+          .send({
+            token: row.token,
+            environment: row.environment,
+            collapseId: message.collapseId,
+            ttlSeconds: message.ttlSeconds,
+            payload: {
+              aps: { alert: { title: message.title, body: message.body }, sound: 'default', 'thread-id': message.threadId ?? message.kind },
+              // expo-notifications exposes a remote notification's `body` key as `notification.request.content.data`.
+              body: { kind: message.kind, url: message.url },
+            },
+          })
+          .catch((error: Error) => ({ status: 0, reason: error.message }));
+        result = apnsResult;
+        dead = isDeadToken(apnsResult);
+      }
       if (result.status === 200) {
         sent += 1;
-      } else if (isDeadToken(result)) {
+      } else if (dead) {
         removed += Number(db.prepare('DELETE FROM push_tokens WHERE id = ?').run(row.id).changes);
       } else {
-        console.warn(`[mirobe] push to ${row.id} failed: ${result.status} ${result.reason ?? ''}`.trim());
+        console.warn(`[mirobe] push to ${row.id} (${row.platform}) failed: ${result.status} ${result.reason ?? ''}`.trim());
       }
     })
   );

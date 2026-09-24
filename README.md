@@ -61,6 +61,23 @@ Kıyafet fotoğrafları, ayna fotoğrafı / kamera karesi ve Jev'e yazılanlar �
 - **Eski sunucuyla:** `aiConsent` alanı yoksa "henüz sorulmadı" sayılır; `POST` `404` dönerse izin cihazda tutulur (`kv ai.consent = local`) ve uygulama çalışmaya devam eder. Sunucu güncellenince bu izin bir kez sunucuya yazılır, kullanıcıya tekrar sorulmaz.
 - **Dağıtım sırası:** önce izin ekranlı uygulama sürümü (eski sunucuyla da çalışır), sonra sunucu. Sunucu güncellenince mevcut her hesap (App Review demo hesabı dahil) ilk AI eyleminde bir kez izin verir; izin ekranı olmayan eski build'lerde AI özellikleri genel hata gösterir.
 
+## Yapay zekâ çıktısını bildirme (Google Play AI içerik politikası, 1.0.1)
+
+Kullanıcı bir AI sonucunu uygulamanın içinden bildirebilir (`mobile/src/components/report.tsx`, `server/src/lib/reports.ts`).
+
+- **Uygulama:** küçük bir "Sorun bildir" / "Report" bağlantısı (bayrak simgesi): deneme görüntüleyicisinde "i" ile açılan bilgi satırında (klip oynuyorsa `video`, yoksa `tryon`), aynadaki yeni deneme sonucunun üst çubuğunda (aynı kural), parça ekranında Stüdyo görünümü açıkken `packshot`, değilse AI etiketleri hazırsa `tagging` ve Jev'in her cevabında (altındaki küçük bayrak ya da cevaba uzun basma, `stylist`). Bağlantı anonim hesapta görünmez. Açılan sayfada dört sebep ("Uygunsuz ya da rahatsız edici", "Yanlış ya da hatalı sonuç", "Gizlilik sorunu", "Diğer") ve isteğe bağlı not (≤500) var. Gönderince ekranda "Teşekkürler, inceleyeceğiz." çıkar; hata sayfada kalır (not kaybolmaz, tekrar denenebilir; günlük sınırda ayrı bir mesaj). Bildirim kuyruğa alınmaz: endpoint'i olmayan eski sunucu `404` dönerse de kullanıcıya teşekkür edilir.
+- **Sunucu:** `POST /api/reports` `{targetType: 'tryon'|'packshot'|'video'|'stylist'|'tagging', targetId, reason: 'offensive'|'inaccurate'|'privacy'|'other', note?, excerpt?}` (şema `shared/src/report.ts`). Kayıtlı oturum ister (`401` → `403 AUTH_REQUIRED`), AI izni istemez; `201 {id, hidden?}` döner. `tryon`/`video` kullanıcının silinmemiş denemesi, `packshot`/`tagging` kendi parçası olmalı (yoksa `404`); `stylist` için `targetId` uygulamadaki cevap id'sidir ve sunucu sohbet saklamadığı için cevabın metni `excerpt` (≤1000) olarak gelir. Diğer hedeflerde `excerpt`'i sunucu doldurur (istemcinin gönderdiği yok sayılır): deneme / klip / stüdyo görselinin medya yolu ya da etiketlerin JSON'u; görsel gizlense ya da parça düzenlense de inceleme bildirilen hâli görür. Hesap başına 24 saatte 20 bildirim (tablodan sayılır, yeniden başlatmada sıfırlanmaz; aşınca `429 RATE_LIMITED`). Her bildirim tek satır log yazar: `[mirobe] REPORT <type> <id> <reason>`.
+- **Görseli gizleme:** sebep `offensive` ya da `privacy` ise bildiren kullanıcıdan görsel kaldırılır: deneme silme işareti alır (kullanıcının kendi silmesiyle aynı; diğer cihazlar sonraki eşitlemede düşürür), klip ya da stüdyo görseli temizlenir (yeniden, normal ücretiyle yapılabilir). Dosyalar inceleme için diskte kalır ve hesapla silinir. Etiketler ve Jev cevapları yalnızca kaydedilir. Değişen satır yanıtta `hidden` olarak gelir, uygulama hemen uygular.
+- **Tablo:** `ai_reports` (migration 8): `id, user_id, target_type, target_id, reason, note, excerpt, created_at, handled_at`. Hesap silme bildirimleri de siler (`user_id` ile bulunur). İnceleme elle yapılır:
+
+  ```bash
+  sqlite3 /app/data/mirobe.db "SELECT id, user_id, target_type, target_id, reason, note, excerpt, created_at FROM ai_reports WHERE handled_at IS NULL ORDER BY created_at"
+  sqlite3 /app/data/mirobe.db "UPDATE ai_reports SET handled_at = strftime('%Y-%m-%dT%H:%M:%fZ') WHERE id = 'rep_…'"
+  ```
+
+  Görsel hedeflerde `excerpt` medya yoludur (`/media/<dosya>`; dosya veri dizinindeki `media/` altında). Gizlilik politikası bildirimlerin hesapla saklandığını, incelendiğini ve hesapla silindiğini söyler.
+- **Dağıtım sırası:** sunucu ile uygulama hangi sırayla çıkarsa çıksın çalışır (eski sunucuda bildirim sessizce kaybolur, eski uygulama endpoint'i çağırmaz).
+
 ## Abonelikler
 
 Planlar `shared/src/plans.ts` içindedir (`PLANS`, `REVENUECAT_PRODUCTS`, `REVENUECAT_ENTITLEMENTS`). Plan hakları aylık **adet** olarak sayılır (UTC ay başı sıfırlanır): her işlem, sağlayıcıya maliyeti ne olursa olsun 1 sayılır. AI özellikleri her planda giriş yapmış hesap ister.
@@ -177,9 +194,11 @@ APNS_KEY_ID="…"                       # anahtarın Key ID'si (10 karakter)
 APNS_TEAM_ID="F293R6XW2Y"
 APNS_KEY_BASE64="…"                   # base64 -i AuthKey_<KEYID>.p8 | tr -d '\n'   (Linux: base64 -w0)
 APNS_TOPIC="com.orbexastudio.mirobe"
+FCM_SERVICE_ACCOUNT_BASE64="…"        # Android (FCM HTTP v1): base64 -i service-account.json | tr -d '\n'
+FCM_PROJECT_ID=""                     # isteğe bağlı; boşsa JSON'daki project_id
 ```
 
-Anahtar yoksa sunucu bir kez log yazar ve bildirim göndermez. Açılışta `apns: on/off` yazılır.
+Anahtar yoksa sunucu platform başına bir kez log yazar ve o platforma bildirim göndermez (iOS ve Android birbirinden bağımsız). Açılışta `apns: on/off, fcm: on/off` yazılır. Android'de hizmet hesabı JSON'u Firebase konsolu → Proje ayarları → Hizmet hesapları → *Yeni özel anahtar oluştur* ile alınır; sunucu `node:crypto` ile RS256 JWT imzalayıp OAuth2 erişim token'ı alır (ek bağımlılık yok, `server/src/lib/fcm.ts`). FCM 404 / `UNREGISTERED` ya da geçersiz registration token (400 `INVALID_ARGUMENT`, `message.token`) dönen token silinir. Ödeme bildirimleri `channel_id: "mirobe"` ile gider (`ANDROID_DEFAULT_CHANNEL`, `shared/src/push.ts`). Uygulama bu kanalı "Mirobe" adıyla, varsayılan önemle kurar (izin istenince, token kaydından önce ve hatırlatıcı planlanırken) ve `app.json`'daki `expo-notifications` eklentisinin `defaultChannel: "mirobe"` ayarı onu FCM'in varsayılan kanalı yapar; böylece bildirim, uygulama arka plandayken de öndeyken de "Miscellaneous"a düşmez. Kanalı bilmeyen eski build'de Android eskisi gibi yedek kanala düşer. iOS'u etkilemez. `daily` kanalı cihazdaki günlük hatırlatıcıya ait.
 
 **Native:** `expo-notifications` config plugin'i `aps-environment` entitlement'ını ekler (`development`; App Store / TestFlight dışa aktarımında dağıtım profili `production` yapar). Modül eklendikten sonra yeni bir native build gerekir; eski build'lerde bildirim kodu hiçbir şey yapmaz ve Profil'de Bildirimler bölümü görünmez.
 
@@ -215,7 +234,7 @@ cd mobile && npx expo run:ios    # dev build + simülatör (ilk derleme ~10 dk)
 ## Testler
 
 ```bash
-npm test          # sunucu: auth, medya, sync (LWW, silme işareti, sahiplik), stilist, kota, try-on önbelleği, AI izni, kredi bitince iade, packshot istemi, EXIF yönü
+npm test          # sunucu: auth, medya, sync (LWW, silme işareti, sahiplik), stilist, kota, try-on önbelleği, AI izni, kredi bitince iade, packshot istemi, EXIF yönü, AI çıktısı bildirme
 npm run lint      # tsc: server + mobile
 ```
 

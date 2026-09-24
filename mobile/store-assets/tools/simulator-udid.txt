@@ -1,0 +1,1 @@
+2466D2BB-2D93-4B8D-A3B2-1DD02FCF8FA6 com.apple.CoreSimulator.SimRuntime.iOS-26-5

@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { getLocales } from 'expo-localization';
 
 export type Lang = 'tr' | 'en';
@@ -352,7 +353,10 @@ const tr = {
       not_configured: 'Mağaza ürünleri henüz hazır değil. Daha sonra tekrar dene.',
       network: 'Mağazaya ulaşılamadı. Bağlantını kontrol edip tekrar dene.',
       already_owned: 'Bu mağaza hesabında zaten bir abonelik var. “Satın alımları geri yükle”yi dene; başka bir Mirobe hesabına bağlıysa o hesapla giriş yap.',
-      not_allowed: 'Bu cihazda satın alma yapılamıyor (ör. Ekran Süresi kısıtlaması).',
+      not_allowed:
+        Platform.OS === 'ios'
+          ? 'Bu cihazda satın alma yapılamıyor (ör. Ekran Süresi kısıtlaması).'
+          : 'Bu cihazda satın alma yapılamıyor. Google Play’de oturum açık mı, kontrol et.',
       unavailable: 'Bu paket şu an satın alınamıyor. Daha sonra tekrar dene.',
       unknown: 'Satın alma tamamlanamadı. Tekrar dene.',
     },
@@ -431,6 +435,24 @@ const tr = {
     ],
     ask: 'Bu akşam için ne giysem?',
     askWith: (item: string) => `Bu akşam ${item} ile ne giysem?`,
+  },  /** "Report AI output" (Google Play AI-generated content policy): the sheet on try-ons, clips, studio images, AI tags and Jev replies. */
+  report: {
+    action: 'Sorun bildir',
+    title: 'Sorun bildir',
+    body: 'Bu sonuçta neyin yanlış olduğunu seç, inceleyeceğiz.',
+    reasons: {
+      offensive: 'Uygunsuz ya da rahatsız edici',
+      inaccurate: 'Yanlış ya da hatalı sonuç',
+      privacy: 'Gizlilik sorunu',
+      other: 'Diğer',
+    },
+    note: 'Not ekle (isteğe bağlı)',
+    /** Offensive or privacy reports of an image: the server stops showing it to the reporter. */
+    hides: 'Gönderince bu içeriği sana artık göstermeyiz.',
+    send: 'Gönder',
+    thanks: 'Teşekkürler, inceleyeceğiz.',
+    failed: 'Bildirimin gönderilemedi. Tekrar dene.',
+    limit: 'Bugünlük bildirim sınırına ulaştın. Yarın tekrar dene.',
   },
 };
 
@@ -781,7 +803,10 @@ const en: Dict = {
       not_configured: 'Store products are not ready yet. Please try again later.',
       network: 'Could not reach the store. Check your connection and try again.',
       already_owned: 'This store account already has a subscription. Try “Restore purchases”; if it belongs to another Mirobe account, sign in with that one.',
-      not_allowed: 'Purchases are not allowed on this device (e.g. Screen Time restrictions).',
+      not_allowed:
+        Platform.OS === 'ios'
+          ? 'Purchases are not allowed on this device (e.g. Screen Time restrictions).'
+          : 'Purchases are not available on this device. Check that you are signed in to Google Play.',
       unavailable: 'This package cannot be bought right now. Please try again later.',
       unknown: 'The purchase could not be completed. Please try again.',
     },
@@ -852,6 +877,22 @@ const en: Dict = {
     ],
     ask: 'What should I wear tonight?',
     askWith: (item: string) => `What goes with my ${item} tonight?`,
+  },  report: {
+    action: 'Report',
+    title: 'Report a problem',
+    body: 'Pick what’s wrong with this result and we’ll review it.',
+    reasons: {
+      offensive: 'Offensive or disturbing',
+      inaccurate: 'Wrong or inaccurate result',
+      privacy: 'Privacy concern',
+      other: 'Other',
+    },
+    note: 'Add a note (optional)',
+    hides: 'Once sent, we’ll stop showing this to you.',
+    send: 'Send',
+    thanks: 'Thanks, we’ll take a look.',
+    failed: 'Couldn’t send your report. Try again.',
+    limit: 'You’ve reached today’s report limit. Try again tomorrow.',
   },
 };
 

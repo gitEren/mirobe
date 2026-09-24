@@ -6,6 +6,7 @@ import { router, useSegments, type Href } from 'expo-router';
 import {
   AI_CONSENT_REQUIRED,
   normalizePlanId,
+  type AiReportInput,
   PLANS,
   USER_NOTICE_KINDS,
   type AuthResponse,
@@ -1121,6 +1122,28 @@ export async function refreshTryOn(tryonId: string): Promise<TryOnRow> {
   adoptServerRow('tryons', tryon);
   reloadFromDisk();
   return tryon;
+}
+
+/**
+ * "Report AI output" (Google Play AI-generated content policy). Sent once, never queued: a server
+ * that predates the endpoint (404) counts as sent, so the user is thanked either way; offline or
+ * a refusal throws. An offensive or privacy report can take the image away (`hidden`): the row
+ * the server changed is adopted at once, and a cleared studio image is not made again by itself.
+ */
+export async function reportAiOutput(input: AiReportInput): Promise<void> {
+  const garmentTarget = input.targetType === 'packshot' || input.targetType === 'tagging';
+  // The server checks the piece is ours: an edit still on this device goes first (best effort).
+  if (garmentTarget) await syncFresh(garmentRefs([input.targetId])).catch(() => undefined);
+  try {
+    const { hidden } = await api.reportAiOutput(input);
+    if (!hidden) return;
+    adoptServerRow(hidden.table, hidden.row);
+    if (hidden.table === 'garments') dropAutoStudio([hidden.row.id]);
+    reloadFromDisk();
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return;
+    throw error;
+  }
 }
 
 export function findTryOn(garmentIds: string[]): TryOnRow | undefined {

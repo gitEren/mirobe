@@ -45,6 +45,10 @@ export interface Config {
   apnsKey?: string;
   /** apns-topic: the app's bundle id. */
   apnsTopic: string;
+  /** Firebase service-account JSON for FCM (Android push), base64 encoded (raw JSON accepted). Off while missing. */
+  fcmServiceAccount?: string;
+  /** Overrides the service account's project_id. */
+  fcmProjectId?: string;
 }
 
 export function loadConfig(overrides: Partial<Config> = {}): Config {
@@ -82,6 +86,8 @@ export function loadConfig(overrides: Partial<Config> = {}): Config {
     apnsTeamId: env.APNS_TEAM_ID || 'F293R6XW2Y',
     apnsKey: env.APNS_KEY_BASE64 || undefined,
     apnsTopic: env.APNS_TOPIC || 'com.orbexastudio.mirobe',
+    fcmServiceAccount: env.FCM_SERVICE_ACCOUNT_BASE64 || undefined,
+    fcmProjectId: env.FCM_PROJECT_ID || undefined,
     ...overrides,
   };
 }

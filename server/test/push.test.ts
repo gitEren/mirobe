@@ -12,6 +12,7 @@ import { createApp } from '../src/app';
 import { loadConfig } from '../src/config';
 import { openDb, type Db } from '../src/db/index';
 import { createApnsSender, type ApnsNotification, type ApnsResult, type PushSender } from '../src/lib/apns';
+import type { FcmNotification, FcmSender } from '../src/lib/fcm';
 import { requireAccount, requireAuth } from '../src/lib/auth';
 import { errorHandler } from '../src/lib/http';
 import { savePushToken, setNotificationSettings } from '../src/lib/push';
@@ -36,6 +37,18 @@ function stubSender(answers: Record<string, ApnsResult> = {}) {
     async send(notification) {
       sent.push(notification);
       return answers[notification.token] ?? { status: 200 };
+    },
+  };
+  return { sender, sent };
+}
+
+/** Records every FCM message and answers 200. */
+function stubFcm() {
+  const sent: FcmNotification[] = [];
+  const sender: FcmSender = {
+    async send(notification) {
+      sent.push(notification);
+      return { status: 200 };
     },
   };
   return { sender, sent };
@@ -200,10 +213,10 @@ describe('push tokens and notification settings', () => {
 });
 
 describe('payment notices from the RevenueCat webhook', () => {
-  async function start(push: PushSender | null) {
+  async function start(push: PushSender | null, fcm?: FcmSender | null) {
     const config = loadConfig({ dataDir, revenueCatSecret: undefined, revenueCatWebhookAuth: SECRET, devPlanOverride: undefined, authRateLimit: 1000 });
     const db = openDb(':memory:');
-    const billing = billingRoutes({ db, config, usage: new UsageLedger(db), auth: requireAuth(db), requireAccount, push });
+    const billing = billingRoutes({ db, config, usage: new UsageLedger(db), auth: requireAuth(db), requireAccount, push, fcm });
     const app = express();
     app.use(express.json());
     app.use(billing);
@@ -241,7 +254,7 @@ describe('payment notices from the RevenueCat webhook', () => {
       const purchase = await webhook(server.base, { type: 'INITIAL_PURCHASE', app_user_id: 'u_buyer', product_id: 'mirobe_plus_monthly', period_type: 'NORMAL', price: 9.99 });
       assert.equal(purchase.status, 200);
       await server.billing.settled();
-      // Production devices only (the event is a production purchase); Android waits for FCM.
+      // The iOS devices through APNs; without an FCM sender the Android phone is skipped.
       assert.deepEqual(sent.map((n) => n.token).sort(), [TR_PHONE, EN_TABLET].sort());
       assert.deepEqual(alert(to(sent, TR_PHONE)), { title: 'Ödemen alındı', body: 'Mirobe Plus planın etkin. Yeni haklarını hemen kullanabilirsin.' });
       assert.deepEqual(alert(to(sent, EN_TABLET)), { title: 'Payment received', body: 'Your Mirobe Plus plan is active and ready to use.' });
@@ -267,6 +280,33 @@ describe('payment notices from the RevenueCat webhook', () => {
       assert.deepEqual(alert(to(sent, TR_PHONE)), { title: 'Pro’ya geçtin', body: 'Ödemen alındı, yeni planın hemen etkin.' });
       assert.deepEqual(alert(to(sent, EN_TABLET)), { title: 'You’re on Pro now', body: 'Payment received. Your new plan is active right away.' });
       assert.equal(data(to(sent, TR_PHONE))?.kind, 'upgrade');
+    } finally {
+      server.close();
+    }
+  });
+
+  test('with both senders a purchase reaches the iOS devices through APNs and the Android phone through FCM', async () => {
+    const apns = stubSender();
+    const fcm = stubFcm();
+    const server = await start(apns.sender, fcm.sender);
+    try {
+      buyer(server.db);
+      addDevice(server.db, 'u_buyer', 'fcm:android-en-456', 'production', 'en', 'android');
+      await webhook(server.base, { type: 'INITIAL_PURCHASE', app_user_id: 'u_buyer', product_id: 'mirobe_plus_monthly', period_type: 'NORMAL', price: 9.99 });
+      await server.billing.settled();
+      assert.deepEqual(apns.sent.map((n) => n.token).sort(), [TR_PHONE, EN_TABLET].sort());
+      assert.deepEqual(
+        fcm.sent.map((n) => [n.token, n.title, n.body]).sort(),
+        [
+          ['fcm:android-en-456', 'Payment received', 'Your Mirobe Plus plan is active and ready to use.'],
+          ['fcm:android-token-123', 'Ödemen alındı', 'Mirobe Plus planın etkin. Yeni haklarını hemen kullanabilirsin.'],
+        ].sort()
+      );
+      const android = fcm.sent.find((n) => n.token === 'fcm:android-token-123')!;
+      assert.deepEqual(android.data, { kind: 'purchase', url: 'mirobe:///profile' });
+      assert.equal(android.collapseId, 'mirobe-subscription');
+      assert.equal(android.ttlSeconds, 24 * 60 * 60);
+      assert.equal(android.channelId, 'mirobe');
     } finally {
       server.close();
     }
@@ -611,7 +651,8 @@ describe('payment notices from the RevenueCat webhook', () => {
     const { sender, sent } = stubSender();
     const config = loadConfig({ dataDir, revenueCatSecret: undefined, revenueCatWebhookAuth: SECRET, devPlanOverride: undefined, authRateLimit: 1000 });
     const db = openDb(':memory:');
-    const app = createApp({ db, config, media: new MediaStorage(db, dataDir), usage: new UsageLedger(db), push: sender });
+    const fcm = stubFcm();
+    const app = createApp({ db, config, media: new MediaStorage(db, dataDir), usage: new UsageLedger(db), push: sender, fcm: fcm.sender });
     const server = app.listen(0);
     await new Promise((resolve) => server.once('listening', resolve));
     const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
@@ -630,10 +671,18 @@ describe('payment notices from the RevenueCat webhook', () => {
         body: JSON.stringify({ token: phone, platform: 'ios', environment: 'production', lang: 'en' }),
       });
       assert.equal(registered.status, 200);
+      const android = await fetch(`${base}/api/push/tokens`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${account.token}` },
+        body: JSON.stringify({ token: 'fcm:wired-android', platform: 'android', environment: 'production', lang: 'tr' }),
+      });
+      assert.equal(android.status, 200);
       assert.equal((await webhook(base, { type: 'INITIAL_PURCHASE', app_user_id: account.userId, product_id: 'mirobe_pro_annual', price: 199.99 })).status, 200);
-      await waitFor(() => sent.length === 1);
+      await waitFor(() => sent.length === 1 && fcm.sent.length === 1);
       assert.equal(sent[0].token, phone);
       assert.equal(alert(sent[0]).title, 'Payment received');
+      assert.equal(fcm.sent[0].token, 'fcm:wired-android');
+      assert.equal(fcm.sent[0].title, 'Ödemen alındı');
     } finally {
       server.close();
     }

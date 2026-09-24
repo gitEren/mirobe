@@ -41,3 +41,6 @@ example
 # generated native folders
 /ios
 /android
+
+# Firebase config for Android push (not secret, but kept local; see app.config.js)
+google-services.json

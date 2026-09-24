@@ -24,6 +24,13 @@ export const PushTokenSchema = z
   });
 export type PushTokenInput = z.infer<typeof PushTokenSchema>;
 
+/**
+ * The Android notification channel for pushes from the server (payment notices), named "Mirobe".
+ * The app creates it, mobile/app.json makes it FCM's default (expo-notifications `defaultChannel`)
+ * and the server names it in each FCM message, so no notice lands in "Miscellaneous".
+ */
+export const ANDROID_DEFAULT_CHANNEL = 'mirobe';
+
 export const RemovePushTokenSchema = z.object({ token: z.string().trim().min(1).max(512) });
 
 /** Per-account notification switches. The daily outfit reminder is scheduled on the device and not stored here. */

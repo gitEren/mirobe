@@ -1,6 +1,8 @@
 import Constants from 'expo-constants';
 import type {
   AiConsentResponse,
+  AiReportInput,
+  AiReportResponse,
   AnalyzeGarmentResponse,
   AuthResponse,
   GarmentRow,
@@ -137,6 +139,8 @@ export const api = {
   liveStart: (garmentId: string) => request<LiveStartResponse>('POST', '/api/live/start', { garmentId }),
   liveToken: (sessionId: string) => request<{ token: string }>('POST', '/api/live/token', { sessionId }),
   liveStop: (sessionId: string, usedSeconds: number) => request<{ ok: boolean }>('POST', '/api/live/stop', { sessionId, usedSeconds }),
+  /** Reports an AI result (try-on, clip, studio image, tags, Jev reply). A server that predates it answers 404. */
+  reportAiOutput: (input: AiReportInput) => request<AiReportResponse>('POST', '/api/reports', input, 15_000),
   /** Registers this device's native push token (APNs on iOS) for the signed-in user; a known token moves to them. */
   registerPushToken: (input: PushTokenInput) => request<{ ok: boolean }>('POST', '/api/push/tokens', input, 15_000),
   /** Short timeout: it runs while signing out. */

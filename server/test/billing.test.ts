@@ -317,6 +317,11 @@ describe('billing sync', () => {
       assert.equal(privacy.status, 200);
       assert.match(privacy.headers.get('content-type') ?? '', /text\/html/);
       assert.equal((await realFetch(`${base}/api/legal/terms`)).status, 200);
+      // The account deletion page Google Play links to, in both languages.
+      const deletion = await realFetch(`${base}/api/legal/delete-account?lang=en`);
+      assert.equal(deletion.status, 200);
+      assert.match(await deletion.text(), /Profile and tap Delete account/);
+      assert.match(await (await realFetch(`${base}/api/legal/delete-account`, { headers: { 'Accept-Language': 'tr-TR' } })).text(), /Hesabı sil/);
     } finally {
       server.close();
     }

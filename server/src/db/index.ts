@@ -132,6 +132,25 @@ const MIGRATIONS: (string | ((db: Db) => void))[] = [
   // messages to be sent to the AI providers. NULL (every existing user) until it does; withdrawing
   // clears it again. The AI routes refuse accounts without it.
   (db) => addColumn(db, 'users', 'ai_consent_at', 'TEXT'),
+  // 8: "Report AI output" (Google Play AI-generated content policy). One row per report, reviewed
+  // by the operator, who stamps handled_at. `excerpt` is what the reporter saw: the media path of the
+  // image or clip, the AI tags, or the Jev reply (chats are not stored). Account deletion finds the
+  // table by its user_id.
+  `
+  CREATE TABLE IF NOT EXISTS ai_reports (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    target_type TEXT NOT NULL CHECK (target_type IN ('tryon', 'packshot', 'video', 'stylist', 'tagging')),
+    target_id TEXT NOT NULL,
+    reason TEXT NOT NULL CHECK (reason IN ('offensive', 'inaccurate', 'privacy', 'other')),
+    note TEXT CHECK (note IS NULL OR length(note) <= 500),
+    excerpt TEXT CHECK (excerpt IS NULL OR length(excerpt) <= 1000),
+    created_at TEXT NOT NULL,
+    handled_at TEXT
+  );
+  CREATE INDEX IF NOT EXISTS ai_reports_user ON ai_reports(user_id, created_at);
+  CREATE INDEX IF NOT EXISTS ai_reports_open ON ai_reports(handled_at, created_at);
+  `,
 ];
 
 export function openDb(dataDir: string | ':memory:'): Db {

@@ -7,3 +7,4 @@ export * from './colors';
 export * from './auth';
 export * from './push';
 export * from './consent';
+export * from './report';

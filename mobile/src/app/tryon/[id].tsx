@@ -7,6 +7,7 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BookmarkCheck, BookmarkPlus, Camera, Film, ImageIcon, Info, Sparkles, Trash2, UserRound, X } from 'lucide-react-native';
 import { garmentImage, isIsolated } from '@/components/garment';
+import { ReportLink, ReportSheet, type ReportTarget } from '@/components/report';
 import { isLivePhoto, relativeTime } from '@/components/tryon';
 import { IconButton, Txt, haptic } from '@/components/ui';
 import { mediaUrl } from '@/lib/api';
@@ -45,6 +46,9 @@ export default function TryOnViewer() {
   const [clipRequested, setClipRequested] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [info, setInfo] = useState(false);
+  const [report, setReport] = useState<ReportTarget | null>(null);
+  /** A report was sent from here: an offensive or privacy one removes the try-on, then the viewer closes. */
+  const [reported, setReported] = useState(false);
 
   const videoUrl = tryon?.videoStatus === 'ready' ? mediaUrl(tryon.videoUrl) : undefined;
   const player = useVideoPlayer(videoUrl ?? null, (p) => {
@@ -76,12 +80,24 @@ export default function TryOnViewer() {
     }
   }, [tryon, clipRequested, t]);
 
+  // The reported try-on is gone: the thank-you stays up a moment, then the viewer closes.
+  useEffect(() => {
+    if (tryon || !reported) return;
+    const timer = setTimeout(() => router.back(), 1600);
+    return () => clearTimeout(timer);
+  }, [tryon, reported]);
+
   if (!tryon) {
     return (
       <View style={[styles.center, { paddingTop: insets.top }]}>
         <IconButton accessibilityLabel={t.common.close} onPress={() => router.back()}>
           <X size={18} color={colors.white} />
         </IconButton>
+        {message ? (
+          <View style={[styles.message, { marginTop: 16 }]}>
+            <Txt style={{ color: 'rgba(255,255,255,0.92)', fontSize: 12 }}>{message}</Txt>
+          </View>
+        ) : null}
       </View>
     );
   }
@@ -177,9 +193,11 @@ export default function TryOnViewer() {
             <LinearGradient pointerEvents="none" colors={['transparent', 'rgba(0,0,0,0.85)']} locations={[0, 0.45]} style={StyleSheet.absoluteFill} />
             <View style={styles.meta}>
               {live ? <Camera size={12} color={colors.amber} /> : <UserRound size={12} color={colors.amber} />}
-              <Txt style={styles.metaText}>
+              <Txt style={[styles.metaText, { flex: 1 }]} numberOfLines={1}>
                 {live ? t.tryons.fromCameraLong : t.tryons.fromMirrorLong} · {relativeTime(tryon.createdAt, lang)}
               </Txt>
+              {/* The clip when it is playing, otherwise the photo. */}
+              <ReportLink dark onPress={() => setReport({ type: videoUrl && showVideo ? 'video' : 'tryon', id: tryon.id })} />
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}>
               {items.map((garment) => (
@@ -226,6 +244,14 @@ export default function TryOnViewer() {
           <Sparkles size={15} color={colors.gold} />
         </Pressable>
       </View>
+      <ReportSheet
+        target={report}
+        onClose={() => setReport(null)}
+        onSent={(text) => {
+          setReported(true);
+          setMessage(text);
+        }}
+      />
     </View>
   );
 }
