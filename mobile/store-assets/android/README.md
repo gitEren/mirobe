@@ -148,12 +148,12 @@ Still to do:
 1. **[Eren or Claude via Firebase Management API]** After the first Play upload, copy the **Play App
    Signing key** SHA-1 and SHA-256 (Play Console → Test and release → App integrity → App signing) and add
    them to the Firebase Android app. (Installs from Play are signed with that key, not the upload key.)
-2. **[Claude, only on your explicit "deploy" go]** set on the server
-   `FCM_SERVICE_ACCOUNT_BASE64=$(base64 -i ~/.personal-dev/firebase/mirobe-fcm-service-account.json | tr -d '\n')`
-   (the project id is read from the JSON) and restart. The server log then shows `fcm: on` and payment
-   notices reach Android devices like iOS ones; until then it logs once that FCM is not configured.
-3. Payment notices use the app's default notification channel (no `channel_id`); the daily reminder
-   uses the app-created `daily` channel.
+2. Done (24 Sep 2026): `FCM_SERVICE_ACCOUNT_BASE64` is set on the production server; its log shows `fcm: on`.
+3. Payment notices go to the app's "Mirobe" channel (`channel_id: mirobe`); the daily reminder uses the
+   app-created `daily` channel.
+4. **Server deploy pending (needs Eren's go):** the "Report AI output" endpoint `POST /api/reports` and the
+   report sentence in the privacy/delete-account pages are in the code but not yet on the server. The app
+   thanks the user quietly until then; deploy before the first public Android release.
 
 ## 7. Before production
 
@@ -178,4 +178,5 @@ Still to do:
 | RevenueCat products → entitlements → offering | or ✔ | ✔ RevenueCat API v2 |
 | Firebase project, Android app, google-services.json, FCM key | done | – |
 | Play App Signing SHA-1/SHA-256 → Firebase (after first upload) | or ✔ | ✔ Firebase Management API |
-| `FCM_SERVICE_ACCOUNT_BASE64` on the server | – | ✔ only with an explicit go for the deploy |
+| `FCM_SERVICE_ACCOUNT_BASE64` on the server | – | done |
+| Deploy `POST /api/reports` (Report AI output) | go | ✔ on Eren's go |
